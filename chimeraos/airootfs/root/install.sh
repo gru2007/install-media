@@ -142,7 +142,7 @@ if [ "${CHOICE}" == "local" ]; then
     frzr-deploy
     RESULT=$?
 else
-    frzr-deploy gru2007/chimera-cyberion:${TARGET}
+    frzr-deploy gru2007/chimera-cyberium:${TARGET}
     RESULT=$?
 fi
 
