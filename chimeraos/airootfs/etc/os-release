@@ -1,6 +1,6 @@
-NAME="ChimeraOS"
-PRETTY_NAME="ChimeraOS"
-ID=chimeraos
+NAME="CyberiumOS"
+PRETTY_NAME="CyberiumOS"
+ID=cyberium
 ID_LIKE=arch
 ANSI_COLOR="1;31"
 HOME_URL="https://chimeraos.org"
