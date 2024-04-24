@@ -30,7 +30,5 @@ usbutils
 wget
 zsh
 frzr
-networkmanager
-noto-fonts 
-ttf-dejavu 
+networkmanager 
 ttf-liberation
