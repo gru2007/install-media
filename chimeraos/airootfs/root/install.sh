@@ -22,7 +22,7 @@ fi
 dmesg --console-level 1
 
 if [ ! -d /sys/firmware/efi/efivars ]; then
-    MSG="Legacy BIOS installs are not supported. You must boot the installer in UEFI mode.\n\nWould you like to restart the computer now?"
+    MSG="Установка через BIOS метод загрузки недоступна. Вам необходимо использовать режим UEFI.\n\nХотите перезагрузить компьютер сейчас?"
     if (whiptail --yesno "${MSG}" 10 50); then
         reboot
     fi
@@ -43,11 +43,11 @@ sleep 10
 TARGET="stable"
 while ! ( curl --http1.1 -Ls https://github.com | grep '<html' > /dev/null ); do
     whiptail \
-     "No internet connection detected.\n\nPlease use the network configuration tool to activate a network, then select \"Quit\" to exit the tool and continue the installation." \
+     "Интернет-соединения не обнаружено.\n\nПожалуйста, используйте утилиту настройки интернета, для его подключения, за тем выберите \"Выйти\" для выхода из утилиты и продолжения установки." \
      12 50 \
      --yesno \
-     --yes-button "Configure" \
-     --no-button "Exit"
+     --yes-button "Настроить" \
+     --no-button "Выйти"
 
     if [ $? -ne 0 ]; then
          exit 1
@@ -85,23 +85,23 @@ fi
 
 curl --http1.1 -# -L -o "${TMP_PKG}" -C - "${URL}" 2>&1 | \
 stdbuf -oL tr '\r' '\n' | grep --line-buffered -oP '[0-9]*+(?=.[0-9])' | clean_progress 100 | \
-whiptail --gauge "Downloading Steam" 10 50 0
+whiptail --gauge "Загрузка Steam" 10 50 0
 
 tar -I zstd -xvf "$TMP_PKG" usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -O > "$TMP_FILE"
 mv "$TMP_FILE" "$DESTINATION"
 rm "$TMP_PKG"
 
-MENU_SELECT=$(whiptail --menu "Install Options" 25 75 10 \
-  "Standard:" "Install with default options" \
-  "Advanced:" "Install with advanced options" \
+MENU_SELECT=$(whiptail --menu "Варианты установки" 25 75 10 \
+  "Стандартная:" "Установка с стандартными настройками" \
+  "Продвинутая:" "Установка с расширенными настройками" \
    3>&1 1>&2 2>&3)
 
-if [ "$MENU_SELECT" = "Advanced:" ]; then
-  OPTIONS=$(whiptail --separate-output --checklist "Choose options" 10 55 4 \
-    "Use Firmware Overrides" "DSDT/EDID" OFF \
-    "Unstable Builds" "" OFF 3>&1 1>&2 2>&3)
+if [ "$MENU_SELECT" = "Продвинутая:" ]; then
+  OPTIONS=$(whiptail --separate-output --checklist "Выберите настройки" 10 55 4 \
+    "Использовать Firmware Overrides" "DSDT/EDID" OFF \
+    "Нестабильные сборки" "" OFF 3>&1 1>&2 2>&3)
 
-  if echo "$OPTIONS" | grep -q "Use Firmware Overrides"; then
+  if echo "$OPTIONS" | grep -q "Использовать Firmware Overrides"; then
     echo "Enabling firmware overrides..."
     if [[ ! -d "/tmp/frzr_root/etc/device-quirks/" ]]; then
       mkdir -p "/tmp/frzr_root/etc/device-quirks"
@@ -121,7 +121,7 @@ EOL
     fi
   fi
 
-  if echo "$OPTIONS" | grep -q "Unstable Builds"; then
+  if echo "$OPTIONS" | grep -q "Нестабильные сборки"; then
     TARGET="unstable"
   fi
 fi
@@ -148,12 +148,12 @@ fi
 
 MSG="Installation failed."
 if [ "${RESULT}" == "0" ]; then
-    MSG="Installation successfully completed."
+    MSG="Установка успешно выполнена."
 elif [ "${RESULT}" == "29" ]; then
     MSG="GitHub API rate limit error encountered. Please retry installation later."
 fi
 
-if (whiptail --yesno "${MSG}\n\nWould you like to restart the computer now?" 10 50); then
+if (whiptail --yesno "${MSG}\n\nХотите перезагрузить компьютер сейчас?" 10 50); then
     reboot
 fi
 
