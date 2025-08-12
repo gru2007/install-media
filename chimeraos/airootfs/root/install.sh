@@ -285,7 +285,7 @@ rm "$TMP_PKG"
 
 
 export SHOW_UI=1
-frzr-deploy gru2007/chimera-cyberium:${TARGET}
+frzr-deploy rlc-linux/artemevos:${TARGET}
 RESULT=$?
 
 MSG="Installation failed."
